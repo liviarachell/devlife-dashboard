@@ -1,25 +1,32 @@
-import { useState, useEffect } from 'react';
+// Relogio.jsx — demonstração de CICLO DE VIDA.
+// MONTAGEM: o useEffect roda e liga o setInterval.
+// DESMONTAGEM: a função de limpeza (return) roda e desliga o intervalo.
+// Sem a limpeza, o intervalo continuaria rodando "fantasma" na memória!
+
+import { useState, useEffect } from "react";
 
 function Relogio() {
-    const [hora, setHora] = useState(new Date().toLocaleTimeString());
-    useEffect(() => {
-        console.log('Relógio montado - Intervalo lidago');
+  const [hora, setHora] = useState(new Date().toLocaleTimeString());
 
-        const interval = setInterval(() => {
-            setHora(new Date().toLocaleTimeString());
-        }, 1000);
+  useEffect(() => {
+    console.log("⏰ Relogio MONTADO — intervalo ligado");
 
-        return () => {
-            console.log('Relógio desmontado');
-            clearInterval(interval);
-        }
-    }, []);
+    const intervalo = setInterval(() => {
+      setHora(new Date().toLocaleTimeString());
+    }, 1000);
 
-    return (
-        <span className="font-mono text-emerald-400 text-sm bg-slate-00 px-3 py-1 rouded-lg">
-            {hora}
-        </span>
-    );
+    // Função de LIMPEZA: roda quando o componente sai da tela
+    return () => {
+      console.log("💀 Relogio DESMONTADO — intervalo desligado");
+      clearInterval(intervalo);
+    };
+  }, []); // [] = roda só na montagem
+
+  return (
+    <span className="font-mono text-emerald-400 text-sm bg-slate-800 px-3 py-1 rounded-lg">
+      {hora}
+    </span>
+  );
 }
 
 export default Relogio;
